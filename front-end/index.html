@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Demo</title>
+	<script type="text/javascript" src="/front-end/public/libs/angular-1.4.2/js/angular.js"></script>
+	<script>
+		var myApp = angular.module('myApp', []);
+		myApp.factory('userInfoService', function($http, $q){
+			var getUserInfo = function(){
+				var deferrd = $q.defer();
+				$http({
+					method: 'GET',
+					url: 'http://localhost:8000/back-end/user.json'
+				})
+				.success(function(data){
+					deferrd.resolve(data);
+				})
+				.error(function(reason){
+					deferrd.resolve(reason);
+				});
+				return deferrd.promise;
+			};
+			return {
+				getUserInfo: getUserInfo
+			}
+		});
+		myApp.controller('myController', function($scope, $timeout, userInfoService){
+			userInfoService.getUserInfo()
+			.then(function(data){
+				console.log(data);
+			});
+			$scope.person = {
+				name: 'xlxiao'
+			};
+			// var updateClock = function(){
+			// 	$scope.clock = new Date();
+			// 	$timeout(function() {
+			// 		updateClock();
+			// 	}, 1000);
+			// };
+			// updateClock();
+			$scope.clock = {
+				now: new Date()
+			};
+			var updateClock = function(){
+				$scope.clock.now = new Date();
+			};
+			setInterval(function(){
+				$scope.$apply(updateClock);
+			}, 1000);
+			// updateClock();
+		});
+	</script>
+</head>
+<body ng-controller="myController">
+	<input ng-model="person.name" type="text" placeholder="Your name">
+	<h1>Hello {{ person.name }}</h1>
+	<p>{{ clock }}</p>
+</body>
+</html>
