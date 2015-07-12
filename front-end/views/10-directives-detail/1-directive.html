@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Demo</title>
+	<script type="text/javascript" src="/front-end/public/libs/angular-1.4.2/js/angular.js"></script>
+	<script>
+		var myApp = angular.module('myApp', []);
+		myApp.directive('sidebox', function() {
+		return {
+			restrict: 'EA',
+			scope: {
+				title: '@'
+			},
+			transclude: true,
+			template: '<div class="sidebox">\
+				<div class="content">\
+				<h2 class="header">{{ title }}</h2>\
+				<span class="content" ng-transclude>\
+				</span>\
+				</div>\
+				</div>'
+			};
+		});
+		myApp.controller('SomeController', function($scope) {
+// 可以留空，但需要被定义
+})
+		myApp.controller('myController', function($scope){
+			
+		});
+	</script>
+</head>
+<body ng-controller="myController">
+<div ng-init="someProperty = 'some data'">
+	<div ng-init="siblingProperty='moredata'">
+		Inside Div Two: {{ aThirdProperty }}
+		<div ng-init="aThirdProperty = 'data for 3rd property'" ng-controller="SomeController">
+			Inside Div Three: {{ aThirdProperty }}
+			<div ng-init="aFourthProperty">
+				Inside Div Four: {{ aThirdProperty }}
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

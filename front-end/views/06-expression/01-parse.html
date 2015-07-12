@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Demo</title>
+	<script type="text/javascript" src="/front-end/public/libs/angular-1.4.2/js/angular.js"></script>
+	<script>
+		var myApp = angular.module('myApp', []);
+		myApp.controller('myController', function($scope, $parse){
+			$scope.$watch('expr', function(newVal, oldVal, scope) {
+				if (newVal !== oldVal) {
+					 var parsedGetFun = $parse('parsedExpr');
+					 scope.parsedValue = parsedGetFun(scope, {parsedExpr: newVal});
+				}
+			});
+		});
+	</script>
+</head>
+<body ng-controller="myController">
+	<input ng-model="expr" type="text" placeholder="Enter an expression" />
+	<h2>{{ parsedValue }}</h2>
+</body>
+</html>
